@@ -26,7 +26,7 @@ from langchain.document_loaders import UnstructuredURLLoader
 from langchain.llms import AzureOpenAI
 import openai
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = ""
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # csv_path = ""
