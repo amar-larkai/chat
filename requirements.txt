@@ -19,3 +19,7 @@ pdf2image
 pytesseract
 plotly
 streamlit
+datasets
+huggingface_hub
+transformers
+torch
