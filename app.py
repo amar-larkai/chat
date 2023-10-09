@@ -4,8 +4,17 @@ import random
 import time
 import pickle
 import streamlit as st
+import numpy as np
+import torch
+import cv2
+import torch.nn as nn
+from transformers import ViTModel, ViTConfig
+from torchvision import transforms
+from torch.optim import Adam
+from torch.utils.data import DataLoader
+from tqdm import tqdm
 
-from utils import  get_model
+from utils import  get_model,load_model
 
 chain = get_model()
 
@@ -13,6 +22,26 @@ def load_embeddings_from_pickle(file_path):
     with open(file_path, "rb") as file:
         embeddings = pickle.load(file)
     return embeddings
+
+model=load_model()
+
+def predict(img):
+
+    use_cuda = torch.cuda.is_available()
+    device = torch.device("cuda" if use_cuda else "cpu")
+    print(device)
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Resize((224, 224)),
+        transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                             std=[0.5, 0.5, 0.5])
+        ])
+
+    img = transform(img)
+    output =model(img.unsqueeze(0).to(device))
+    prediction = output.argmax(dim=1).item()
+
+    return id2label[prediction]
 
 
 embeddings = load_embeddings_from_pickle("embeddings.pkl")
